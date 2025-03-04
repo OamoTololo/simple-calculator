@@ -1,3 +1,51 @@
+<?php
+    // Initialize cookies to store the first number, operator, and result
+    $cookieName1 = "num";
+    $cookieValue1 = "";
+    $cookieName2 = "op";
+    $cookieValue2 = "";
+    $cookieName3 = "=";
+    $cookieValue3 = "";
+
+    // Handle number input
+    if(isset($_POST['num'])) {
+        $num = $_POST['input'].$_POST['num'];
+    } else {
+        $num = "";
+    }
+
+    // Handle operator input
+    if(isset($_POST['op'])) {
+        $cookieValue1 = $_POST['input'];
+        setcookie($cookieName1, $cookieValue1, time() + (86400 * 30), "/");
+
+        $cookieValue2 = $_POST['op'];
+        setcookie($cookieName2, $cookieValue2, time() + (86400 * 30), "/");
+
+        $num = "";
+    }
+
+    // Handle equal input
+    if(isset($_POST['equal'])) {
+        $num = $_POST['input'];
+
+        switch($_COOKIE[$cookieName2]) {
+            case "+":
+                $num = $_COOKIE[$cookieName1] + $num;
+                break;
+            case "-":
+                $num = $_COOKIE[$cookieName1] - $num;
+                break;
+            case "*":
+                $num = $_COOKIE[$cookieName1] * $num;
+                break;
+            case "/":
+                $num = $_COOKIE[$cookieName1] / $num;
+                break;
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,7 +143,7 @@
 <body>
     <div class="calc">
         <form action="" method="post">
-            <input type="text" class="maininput">
+            <input type="text" class="maininput" name="input" value="<?php echo $num; ?>"> <!-- Updated value attribute -->
             <div class="button-container">
                 <input type="submit" class="numbtn" name="num" value="7">
                 <input type="submit" class="numbtn" name="num" value="8">
